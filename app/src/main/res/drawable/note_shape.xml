@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--带有阴影的矩形形状-->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--做阴影-->
+    <item>
+        <!--形状-->
+        <shape android:shape="rectangle">
+            <!--颜色灰色-->
+            <solid android:color="#f3f3f3"/>
+            <!--半径-->
+            <corners android:radius="6dp"/>
+        </shape>
+    </item>
+
+    <!--做一层白色的把不要的遮住-->
+    <!--往下移-->
+    <item android:bottom="5dp">
+        <!--形状-->
+        <shape android:shape="rectangle">
+            <!--颜色白色-->
+            <solid android:color="#FFFFFF"/>
+            <!--半径-->
+            <corners android:radius="6dp"/>
+        </shape>
+    </item>
+
+</layer-list>

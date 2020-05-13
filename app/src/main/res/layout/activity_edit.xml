@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".EditActivity">
+
+   <EditText
+       android:id="@+id/et"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       android:gravity="top"
+       android:layout_below="@+id/myToolbar"
+       android:hint="记录你的点滴"
+       android:layout_marginTop="4dp"
+       android:layout_marginLeft="8dp"
+       android:background="@null">
+   </EditText>
+      <!--隐藏下划线-->
+
+   <androidx.appcompat.widget.Toolbar
+       android:id="@+id/myToolbar"
+       android:layout_width="match_parent"
+       android:layout_height="55dp"
+       android:background="@drawable/note_shape" />
+
+</RelativeLayout>
