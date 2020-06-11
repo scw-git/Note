@@ -8,5 +8,9 @@
         <item name="colorAccent">@color/colorAccent</item>
 
     </style>
-
+    <style name="MyGuideTheme" parent="AppTheme">
+        <!-- Customize your theme here. -->
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
 </resources>
