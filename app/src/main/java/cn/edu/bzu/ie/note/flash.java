@@ -35,13 +35,13 @@ public class flash extends AppCompatActivity {
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);//设置转态栏字体为黑色
 
         mHandler = new Handler();
-        mHandler.postDelayed(new Runnable() {
+       /* mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 Intent intent = new Intent(context,MainActivity.class);
                 startActivity(intent);
                 finish();//当在MainActivity按退出键时，不会经过这个页面
             }
-        },1000);//2秒后跳转
+        },1000);//2秒后跳转*/
     }
 }

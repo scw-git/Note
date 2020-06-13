@@ -2,14 +2,18 @@ package cn.edu.bzu.ie.note;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Bundle;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class CHAOZHUO {
+public class CRUD  {
     //SQLiteOpenHelper helper;
     //继承的数据库类，创建了一个对象。NoteDataBase继承了SQLiteOpenHelper
     NoteDataBase helper;
@@ -23,8 +27,9 @@ public class CHAOZHUO {
             NoteDataBase.TAG,}*/;
 
     //继承的数据库类，创建了一个对象。
-    public CHAOZHUO(Context context){
 
+    public CRUD(){}
+    public CRUD(Context context){
         helper = new NoteDataBase(context);
     }
 
@@ -48,8 +53,9 @@ public class CHAOZHUO {
         values.put(NoteDataBase.CONTENT,note.getContent());
         values.put(NoteDataBase.TIME,note.getTime());
         values.put(NoteDataBase.TAG,note.getTag());
+        values.put(NoteDataBase.USER,note.getUser());
         //db已经与数据库相关联了，可以操作数据了
-        long insertId = db.insert(NoteDataBase.TABLE_NAME,null,values);
+        long insertId = db.insert(NoteDataBase.NOTES,null,values);
         note.setId(insertId);
         return note;
     }
@@ -61,7 +67,7 @@ public class CHAOZHUO {
         //查找条件的值
         //将id转换为字符串
         //.....
-       Cursor cursor = db.query(NoteDataBase.TABLE_NAME,column,NoteDataBase.ID +"=?",
+       Cursor cursor = db.query(NoteDataBase.NOTES,column,NoteDataBase.ID +"=?",
                 new String[]{String.valueOf(id)},null,null,null,null);
         if(cursor != null) cursor.moveToFirst();//把游标放到第一的位置
         Note note = new Note(cursor.getString(1),cursor.getString(2),cursor.getInt(3));
@@ -77,8 +83,8 @@ public class CHAOZHUO {
     比如有一个学生类Student,Student里面包含了学生的一些信息源.这样每一个Student对象百就代表了一个学生.
     此时List<Student>就代表这个集合中存放了很多个度学生对象,这个集合就像一个班级一样.*/
     public List<Note> getAllNotes(){
-        //Cursor是每行的集合
-        Cursor cursor = db.query(NoteDataBase.TABLE_NAME,null,null,null,null,null,null,null);
+        //Cursor是每行的集合,rawQuery相当于用SQL语法查询
+        Cursor cursor = db.rawQuery("select * from notes where user =?",new String[]{Login.user});
 
         //ArrayList提供动态添加和减少元素，实现了接口List
         List<Note> notes = new ArrayList<>();
@@ -88,6 +94,7 @@ public class CHAOZHUO {
                 //用note获得ID，content等内容，然后把它们加到Note 创建的对象里
                 //列的类型：cursor.getLong()
                 //列名：cursor.getColumnIndex(NoteDataBase.ID)
+               // note.setUser(cursor.getString(cursor.getColumnIndex(NoteDataBase.USER)));
                 note.setId(cursor.getLong(cursor.getColumnIndex(NoteDataBase.ID)));
                 note.setContent(cursor.getString(cursor.getColumnIndex(NoteDataBase.CONTENT)));
                 note.setTime(cursor.getString(cursor.getColumnIndex(NoteDataBase.TIME)));
@@ -106,12 +113,12 @@ public class CHAOZHUO {
         values.put(NoteDataBase.CONTENT,note.getContent());
         values.put(NoteDataBase.TIME,note.getTime());
         values.put(NoteDataBase.TAG,note.getTag());
-        return db.update(NoteDataBase.TABLE_NAME,values,NoteDataBase.ID + "=?",
+        return db.update(NoteDataBase.NOTES,values,NoteDataBase.ID + "=?",
                 new String[]{String.valueOf(note.getId())});
     }
 
     //通过ID删除
     public void removeNote(Note note){
-        db.delete(NoteDataBase.TABLE_NAME,NoteDataBase.ID + "=" + note.getId(),null);
+        db.delete(NoteDataBase.NOTES,NoteDataBase.ID + "=" + note.getId(),null);
     }
 }

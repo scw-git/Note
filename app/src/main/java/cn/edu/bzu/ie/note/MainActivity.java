@@ -24,7 +24,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -48,12 +47,14 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private List<Note> list ;
     private ListView  listView;
     private static final String TAG = "MainActivity";
+   // private  String user = "0";
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         myToolbar = findViewById(R.id.myToolbar);
         float_btn = findViewById(R.id.float_btn);
         listView = findViewById(R.id.lv);
@@ -150,10 +151,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
 
-        long note_id;
-        int returnMote;//接收返回的mode。什么也不做：-1 新建笔记：0 修改笔记：1
-        returnMote = data.getIntExtra("mode",-1);//必须指定默认值
-        note_id = data.getLongExtra("id",0);//获取到的值会覆盖默认值
+
+        //接收返回的mode。什么也不做：-1 新建笔记：0 修改笔记：1
+        int returnMote = data.getIntExtra("mode",-1);//必须指定默认值
+        long note_id = data.getLongExtra("id",0);//获取到的值会覆盖默认值
 
         if(returnMote == 1) {//更新笔记
             //获取更新的内容
@@ -163,7 +164,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             //更新
             Note note = new Note(content,time,tag);
             note.setId(note_id);//会根据这个ID，修改笔记
-            CHAOZHUO chaozhuo = new CHAOZHUO(context);
+            CRUD chaozhuo = new CRUD(context);
             chaozhuo.open();
             chaozhuo.updataNote(note);
             chaozhuo.close();
@@ -172,17 +173,16 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             String time = data.getStringExtra("time");
             int tag = data.getIntExtra("tag",1);
 
-
             //对数据操作，把内容，时间都放在note中
-            Note note = new Note(content, time, tag);
-            CHAOZHUO cz = new CHAOZHUO(context);
+            Note note = new Note(Login.user,content, time, tag);//把user也添加到数据库,用类名引用静态变量
+            CRUD cz = new CRUD(context);
             cz.open();
             cz.addNote(note); //把数据添加到数据库
             cz.close();
         }else if(returnMote == 2) {//从EditActivity点击了删除按钮
             Note note = new Note();
             note.setId(note_id);
-            CHAOZHUO cz = new CHAOZHUO(MainActivity.this);
+            CRUD cz = new CRUD(MainActivity.this);
             cz.open();
             cz.removeNote(note);
             cz.close();
@@ -193,7 +193,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     //刷新ListView
     public void refreshListView(){
-        CHAOZHUO cz = new CHAOZHUO(context);//开头定义了Context context = this;
+        CRUD cz = new CRUD(context);//开头定义了Context context = this;
         cz.open();//先打开数据库
         list.clear();
         list.addAll(cz.getAllNotes());
@@ -234,7 +234,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                CHAOZHUO cz = new CHAOZHUO(context);
+                CRUD cz = new CRUD(context);
                 cz.open();
                 cz.removeNote(note);
                 cz.close();
